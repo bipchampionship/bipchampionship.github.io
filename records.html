@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BIP Championship</title><meta name="description" content="Official digital home of the BIP Championship.">
+<link rel="stylesheet" href="assets/styles.css"><script defer src="assets/app.js"></script></head><body>
+<div id="nav"></div>
+<main>
+<section class="hero"><div class="container hero-content">
+<div class="eyebrow">The Official Home of the</div><h1>BIP<br>Championship</h1>
+<p class="lead">A tradition of competition. A brotherhood of golf. Preserving every champion, course, score, record and memory since 2021.</p>
+<div class="actions"><a class="btn primary" href="this-year.html">View the 2026 Championship</a><a class="btn secondary" href="history.html">Explore the History</a></div>
+</div></section>
+<div class="stat-strip"><div class="container stats" id="stats"></div></div>
+<section><div class="container"><div class="section-head"><div><span class="eyebrow">The tradition</span><h2>Built one trip at a time.</h2></div><p>The BIP Championship brings friends together for competitive golf, unforgettable destinations, and stories that become better every year.</p></div>
+<div class="grid-3"><a class="card feature-card" href="history.html"><div class="card-body"><div class="card-kicker">Since 2021</div><h3>Championship History</h3><p>Every year, champion, score, course and milestone.</p></div></a>
+<a class="card" href="players.html"><div class="card-body"><div class="card-kicker">BIP Player Index</div><h3>Player Cards</h3><p>Career appearances, championships, round wins and personal bests.</p></div></a>
+<a class="card" href="gallery.html"><div class="card-body"><div class="card-kicker">The BIP Vault</div><h3>Photo Gallery</h3><p>A home for every team photo, trophy presentation, invite and memory.</p></div></a></div></div></section>
+<section style="background:#f1f0e9"><div class="container"><div class="section-head"><div><span class="eyebrow">Hall of champions</span><h2>Those who wore the crown.</h2></div><a class="btn primary" href="history.html">View Full History</a></div><div class="grid-3" id="champions"></div></div></section>
+<section><div class="container"><div class="year-panel" id="current"></div></div></section>
+</main><div id="footer"></div>
+<script>
+document.getElementById('nav').innerHTML=layout('Home');document.getElementById('footer').innerHTML=footer();
+getData().then(d=>{
+ const complete=d.tournaments.filter(t=>t.champion!=='TBD');
+ const totalPlayers=d.players.length;
+ const courses=[...new Set(d.tournaments.flatMap(t=>t.courses))].length;
+ document.getElementById('stats').innerHTML=[
+  [d.tournaments.length,'Annual Championships'],[totalPlayers,'Players'],[courses,'Courses Played'],
+  [complete.length,'Champions Crowned'],[d.records.length,'Official Records']
+ ].map(x=>`<div class="stat"><strong>${x[0]}</strong><span>${x[1]}</span></div>`).join('');
+ document.getElementById('champions').innerHTML=complete.slice(-3).reverse().map(t=>`<article class="card"><div class="card-body"><div class="card-kicker">${t.year} Champion</div><h3>${t.champion}</h3><p>${t.location}<br>${t.courses.join(' • ')}</p></div></article>`).join('');
+ const t=d.tournaments.find(x=>x.year===d.site.currentYear);
+ document.getElementById('current').innerHTML=`<div><div class="eyebrow">This year's tournament</div><h2>${t.year} Championship</h2><p>${d.site.currentDates}<br>${t.location}</p><a class="btn primary" href="this-year.html">Full Tournament Details</a></div><div><h3>Courses</h3><ul>${t.courses.map(c=>`<li>${c}</li>`).join('')}</ul><p>${t.notes}</p></div>`;
+});
+</script></body></html>

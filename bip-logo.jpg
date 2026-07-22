@@ -1,0 +1,21 @@
+
+async function getData(){
+  const res = await fetch('assets/data/site-data.json');
+  if(!res.ok) throw new Error('Could not load site data');
+  return res.json();
+}
+function initials(name){return name.split(' ').map(x=>x[0]).slice(0,2).join('');}
+function nav(){
+ document.querySelector('.menu')?.addEventListener('click',()=>document.querySelector('.navlinks').classList.toggle('open'));
+}
+function layout(active=''){
+ const links=[['index.html','Home'],['about.html','About'],['history.html','History'],['this-year.html','2026 Championship'],['players.html','Player Cards'],['records.html','Records'],['courses.html','Courses'],['gallery.html','Gallery']];
+ return `<header class="topbar"><div class="container nav">
+ <a class="brand" href="index.html"><img src="assets/images/bip-logo.jpg" alt="BIP logo"><span>BIP CHAMPIONSHIP</span></a>
+ <button class="menu">Menu</button><nav class="navlinks">${links.map(([u,n])=>`<a class="${active===n?'active':''}" href="${u}">${n}</a>`).join('')}</nav>
+ </div></header>`;
+}
+function footer(){
+ return `<footer class="footer"><div class="container footer-grid"><div><div class="brand"><img src="assets/images/bip-logo.jpg" alt=""><span>BIP CHAMPIONSHIP</span></div><p>A tradition of competition. A brotherhood of golf.</p><small>Established 2021.</small></div><div><strong>Explore</strong><p><a href="history.html">History</a></p><p><a href="players.html">Players</a></p><p><a href="records.html">Records</a></p></div><div><strong>Update the site</strong><p>Edit <code>assets/data/site-data.json</code> in GitHub.</p></div></div></footer>`;
+}
+document.addEventListener('DOMContentLoaded',nav);
